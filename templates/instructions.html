@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Instructions -- {{ exam.title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='exam-flow.css') }}">
+</head>
+<body class="centered-page">
+
+  <div class="auth-card wide">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <span>AI Exam Proctoring System</span>
+    </div>
+
+    <h1>{{ exam.title }}</h1>
+    <p class="muted">Exam Code: <strong>{{ exam_code }}</strong> &bull; Duration: <strong>{{ exam.duration_minutes }} minutes</strong> &bull; Questions: <strong>{{ exam.questions|length }}</strong></p>
+
+    <h2>Instructions</h2>
+    <ul class="rules-list">
+      <li>Your webcam will monitor you for the entire duration of the exam. Keep your face clearly visible at all times.</li>
+      <li>Only <strong>one person</strong> (you) should be visible in the frame. A second person in frame will be flagged.</li>
+      <li>Do not leave the frame or turn away from the screen for extended periods.</li>
+      <li>Phones, books, laptops, tablets, and other unauthorized items must not be visible in the camera frame.</li>
+      <li>The exam auto-submits when the timer reaches zero, or if repeated violations are detected.</li>
+      <li>All flagged activity is logged with timestamps and screenshots for review after the exam.</li>
+    </ul>
+
+    <h2>Camera Check</h2>
+    <p class="muted">Confirm your camera is working before you begin. This preview is local to your browser and is not recorded.</p>
+
+    <div class="camera-check">
+      <video id="camPreview" autoplay muted playsinline></video>
+      <div id="camStatus" class="camera-status">Click "Test Camera" to check your webcam.</div>
+    </div>
+
+    <div class="button-row">
+      <button id="testCamBtn" class="btn-secondary">Test Camera</button>
+      <label class="agree-label">
+        <input type="checkbox" id="agreeCheck">
+        I have read the instructions and agree to be monitored during this exam.
+      </label>
+    </div>
+
+    <div id="startError" class="error-banner hidden"></div>
+
+    <button id="startExamBtn" class="btn-accent full-width" disabled>Start Exam</button>
+  </div>
+
+<script>
+const testCamBtn = document.getElementById("testCamBtn");
+const camPreview = document.getElementById("camPreview");
+const camStatus = document.getElementById("camStatus");
+const agreeCheck = document.getElementById("agreeCheck");
+const startExamBtn = document.getElementById("startExamBtn");
+const startError = document.getElementById("startError");
+
+let camTested = false;
+
+function updateStartButton() {
+  startExamBtn.disabled = !(camTested && agreeCheck.checked);
+}
+
+testCamBtn.addEventListener("click", async () => {
+  camStatus.textContent = "Requesting camera access...";
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    camPreview.srcObject = stream;
+    camStatus.textContent = "Camera working. You can stop the preview once you're ready -- the exam uses its own capture.";
+    camTested = true;
+    updateStartButton();
+    // Stop this preview stream after a moment; the Flask backend opens its own
+    // capture via OpenCV once the exam begins (browser and backend can't share
+    // the same camera handle at once on most systems).
+    setTimeout(() => {
+      stream.getTracks().forEach(t => t.stop());
+    }, 4000);
+  } catch (err) {
+    camStatus.textContent = "Could not access camera: " + err.message;
+    camTested = false;
+    updateStartButton();
+  }
+});
+
+agreeCheck.addEventListener("change", updateStartButton);
+
+startExamBtn.addEventListener("click", async () => {
+  startExamBtn.disabled = true;
+  startExamBtn.textContent = "Starting...";
+  startError.classList.add("hidden");
+
+  try {
+    const res = await fetch("{{ url_for('begin_exam') }}", { method: "POST" });
+    const data = await res.json();
+    if (data.ok) {
+      window.location.href = data.redirect;
+    } else {
+      startError.textContent = data.error || "Could not start the exam.";
+      startError.classList.remove("hidden");
+      startExamBtn.disabled = false;
+      startExamBtn.textContent = "Start Exam";
+    }
+  } catch (e) {
+    startError.textContent = "Network error while starting the exam. Please try again.";
+    startError.classList.remove("hidden");
+    startExamBtn.disabled = false;
+    startExamBtn.textContent = "Start Exam";
+  }
+});
+</script>
+
+</body>
+</html>

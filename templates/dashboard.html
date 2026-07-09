@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Exam Proctoring System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <header class="topbar">
+    <h1>AI Exam Proctoring System <span class="subtitle">(Proctor Test Dashboard)</span></h1>
+    <div class="controls">
+      <label for="candidateId">Candidate ID</label>
+      <input id="candidateId" type="text" value="candidate_01" />
+
+      <span class="status-indicator">
+        <span id="statusDot" class="dot idle"></span>
+        <span id="statusText">Idle</span>
+      </span>
+
+      <span id="timer" class="timer">00:00</span>
+
+      <button id="toggleBtn" class="btn-accent">Start Session</button>
+    </div>
+  </header>
+
+  <main class="body">
+    <section class="video-panel">
+      <img id="videoFeed" src="" alt="Press Start Session to begin" />
+      <div id="videoPlaceholder" class="video-placeholder">Press "Start Session" to begin</div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-title">FACES DETECTED</div>
+          <div id="cardFaces" class="card-value">--</div>
+        </div>
+        <div class="card">
+          <div class="card-title">HEAD POSE (Yaw / Pitch)</div>
+          <div id="cardPose" class="card-value">--</div>
+        </div>
+        <div class="card">
+          <div class="card-title">GAZE RATIO</div>
+          <div id="cardGaze" class="card-value">--</div>
+        </div>
+        <div class="card">
+          <div class="card-title">OBJECTS DETECTED</div>
+          <div id="cardObjects" class="card-value">--</div>
+        </div>
+      </div>
+
+      <div class="violation-counter">
+        <div class="card-title">TOTAL VIOLATIONS THIS SESSION</div>
+        <div id="violationCount" class="counter-value">0</div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="alerts">Alerts</button>
+        <button class="tab-btn" data-tab="activity">Full Activity Log</button>
+      </div>
+      <div id="alertsPane" class="log-pane active"></div>
+      <div id="activityPane" class="log-pane"></div>
+    </aside>
+  </main>
+
+  <!-- Report modal -->
+  <div id="reportModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>Session Report</h2>
+      <p id="reportMeta" class="report-meta"></p>
+
+      <div class="score-box">
+        <div class="card-title">INTEGRITY SCORE</div>
+        <div id="reportScore" class="score-value">--</div>
+      </div>
+
+      <div class="card-title" style="margin: 16px 0 6px;">VIOLATION BREAKDOWN</div>
+      <table id="breakdownTable" class="breakdown-table">
+        <thead><tr><th>Event Type</th><th>Count</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <p id="reportPaths" class="report-paths"></p>
+
+      <button id="closeReportBtn" class="btn-accent">Close</button>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

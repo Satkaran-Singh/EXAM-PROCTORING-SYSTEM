@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exam Result -- {{ result.exam_title }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='exam-flow.css') }}">
+</head>
+<body class="centered-page">
+
+  <div class="auth-card wide">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <span>AI Exam Proctoring System</span>
+    </div>
+
+    <h1>Exam Submitted</h1>
+    <p class="muted">
+      {{ result.exam_title }} &bull; {{ result.candidate_name }} ({{ result.candidate_id }})
+      {% if result.submit_reason == 'timeout' %}&bull; Auto-submitted (time expired){% endif %}
+      {% if result.submit_reason == 'violations' %}&bull; Auto-submitted (repeated violations){% endif %}
+    </p>
+
+    <div class="result-grid">
+      <div class="result-box">
+        <div class="card-title">SCORE</div>
+        <div class="result-value">{{ result.correct }} / {{ result.total }}</div>
+        <div class="muted small">{{ result.percentage }}%</div>
+      </div>
+      <div class="result-box">
+        <div class="card-title">INTEGRITY SCORE</div>
+        <div class="result-value {{ 'ok' if result.integrity_score >= 70 else ('warn' if result.integrity_score >= 40 else 'alert') }}">
+          {{ result.integrity_score }}/100
+        </div>
+        <div class="muted small">{{ result.summary.total_events }} violation(s) logged</div>
+      </div>
+    </div>
+
+    {% if result.summary.event_counts %}
+    <h2>Violation Breakdown</h2>
+    <table class="breakdown-table">
+      <thead><tr><th>Event Type</th><th>Count</th></tr></thead>
+      <tbody>
+        {% for event_type, count in result.summary.event_counts.items() %}
+        <tr><td>{{ event_type }}</td><td>{{ count }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+
+    <h2>Answer Review</h2>
+    <div class="answer-review">
+      {% for q in result.per_question %}
+      <div class="review-row {{ 'correct' if q.is_correct else 'incorrect' }}">
+        <div class="review-question">{{ loop.index }}. {{ q.text }}</div>
+        <div class="review-answer">
+          Your answer:
+          <strong>{{ q.options[q.selected_index] if q.selected_index is not none else 'Not answered' }}</strong>
+          {% if not q.is_correct %}
+          &bull; Correct answer: <strong>{{ q.options[q.correct_index] }}</strong>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <p class="report-paths">
+      Full event log: {{ result.summary.log_path }}<br>
+      Screenshots: {{ result.summary.screenshot_dir }}
+    </p>
+
+    <a href="{{ url_for('join') }}" class="btn-accent full-width" style="display:block; text-align:center; text-decoration:none;">
+      Back to Home
+    </a>
+  </div>
+
+</body>
+</html>

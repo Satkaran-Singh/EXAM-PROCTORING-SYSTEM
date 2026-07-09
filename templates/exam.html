@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{{ exam_title }} -- In Progress</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='exam-flow.css') }}">
+</head>
+<body class="exam-body">
+
+  <header class="exam-topbar">
+    <div class="exam-title-block">
+      <h1>{{ exam_title }}</h1>
+      <span class="muted small">{{ candidate_name }} &bull; {{ candidate_id }}</span>
+    </div>
+
+    <div class="proctor-mini">
+      <img id="miniFeed" src="{{ url_for('video_feed') }}" alt="Proctoring feed" />
+      <span id="miniDot" class="dot recording"></span>
+    </div>
+
+    <div id="timer" class="exam-timer">--:--</div>
+  </header>
+
+  <div id="warningBanner" class="warning-banner hidden"></div>
+
+  <main class="exam-main">
+    <section class="question-panel">
+      <div class="question-header">
+        <span id="questionIndexLabel">Question 1 of {{ questions|length }}</span>
+      </div>
+      <p id="questionText" class="question-text"></p>
+      <div id="optionsList" class="options-list"></div>
+    </section>
+
+    <aside class="palette-panel">
+      <div class="legend">
+        <span><i class="dotlegend answered"></i> Answered</span>
+        <span><i class="dotlegend not-answered"></i> Not Answered</span>
+        <span><i class="dotlegend marked"></i> Marked</span>
+        <span><i class="dotlegend not-visited"></i> Not Visited</span>
+      </div>
+      <div id="paletteGrid" class="palette-grid"></div>
+
+      <div class="submit-summary">
+        <div><span id="answeredCount">0</span> Answered</div>
+        <div><span id="notAnsweredCount">0</span> Not Answered</div>
+        <div><span id="markedCount">0</span> Marked</div>
+      </div>
+      <div class="violation-mini">
+        Violations this session: <span id="violationCountMini">0</span>
+      </div>
+      <button id="submitBtn" class="btn-accent full-width">Submit Exam</button>
+    </aside>
+  </main>
+
+  <footer class="exam-footer">
+    <button id="prevBtn" class="btn-secondary">Previous</button>
+    <button id="clearBtn" class="btn-secondary">Clear Response</button>
+    <button id="markNextBtn" class="btn-secondary">Mark for Review &amp; Next</button>
+    <button id="saveNextBtn" class="btn-accent">Save &amp; Next</button>
+  </footer>
+
+  <!-- Submit confirmation modal -->
+  <div id="submitModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>Submit Exam?</h2>
+      <p id="submitSummaryText" class="report-meta"></p>
+      <div class="button-row centered">
+        <button id="cancelSubmitBtn" class="btn-secondary">Go Back</button>
+        <button id="confirmSubmitBtn" class="btn-accent">Submit Now</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const QUESTIONS = {{ questions|tojson }};
+    const DURATION_SECONDS = {{ duration_seconds }};
+    const AUTO_SUBMIT_THRESHOLD = {{ auto_submit_threshold }};
+  </script>
+  <script src="{{ url_for('static', filename='exam.js') }}"></script>
+
+</body>
+</html>

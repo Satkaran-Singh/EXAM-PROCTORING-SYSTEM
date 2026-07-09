@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Join Exam -- AI Proctoring System</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='exam-flow.css') }}">
+</head>
+<body class="centered-page">
+
+  <div class="auth-card">
+    <div class="brand">
+      <div class="brand-dot"></div>
+      <span>AI Exam Proctoring System</span>
+    </div>
+
+    <h1>Enter Exam Details</h1>
+    <p class="muted">Enter the unique exam code provided by your instructor to begin.</p>
+
+    {% if error %}
+    <div class="error-banner">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('do_join') }}">
+      <label for="exam_code">Exam Code</label>
+      <input type="text" id="exam_code" name="exam_code" placeholder="e.g. CS101"
+             value="{{ exam_code or '' }}" autocomplete="off" required>
+
+      <label for="candidate_name">Full Name</label>
+      <input type="text" id="candidate_name" name="candidate_name" placeholder="Your full name"
+             value="{{ candidate_name or '' }}" required>
+
+      <label for="candidate_id">Candidate / Roll ID</label>
+      <input type="text" id="candidate_id" name="candidate_id" placeholder="e.g. 21103045"
+             value="{{ candidate_id or '' }}" required>
+
+      <button type="submit" class="btn-accent full-width">Continue</button>
+    </form>
+
+    <p class="hint">Demo exam codes: <code>MATH101</code>, <code>CS101</code></p>
+  </div>
+
+</body>
+</html>

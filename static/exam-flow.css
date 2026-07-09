@@ -1,0 +1,285 @@
+/* Shared styles for join.html, instructions.html, exam.html, result.html.
+   Reuses the color variables defined in style.css. */
+
+body.centered-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.auth-card {
+  background: var(--bg-panel);
+  border-radius: 12px;
+  padding: 32px 36px;
+  width: 420px;
+  max-width: 100%;
+}
+.auth-card.wide { width: 640px; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: var(--fg-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+.auth-card h1 { margin: 0 0 6px; font-size: 22px; }
+.auth-card h2 { font-size: 15px; margin: 22px 0 8px; }
+.muted { color: var(--fg-muted); }
+.muted.small { font-size: 12px; }
+
+.error-banner {
+  background: rgba(255, 92, 124, 0.15);
+  border: 1px solid var(--alert);
+  color: var(--alert);
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin: 12px 0;
+}
+.error-banner.hidden { display: none; }
+
+form label, .auth-card label {
+  display: block;
+  font-size: 12px;
+  color: var(--fg-muted);
+  margin: 14px 0 4px;
+}
+form input[type="text"], .auth-card input[type="text"] {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid #3f3f55;
+  color: var(--fg-text);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 14px;
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-accent:hover { background: var(--accent-hover); }
+.btn-accent:disabled { opacity: 0.5; cursor: not-allowed; }
+.full-width { width: 100%; margin-top: 18px; }
+
+.btn-secondary {
+  background: var(--bg-card);
+  color: var(--fg-text);
+  border: 1px solid #3f3f55;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-secondary:hover { background: #3a3a50; }
+
+.hint { margin-top: 20px; font-size: 12px; color: var(--fg-muted); }
+.hint code { background: var(--bg-card); padding: 2px 6px; border-radius: 4px; }
+
+.rules-list { padding-left: 18px; font-size: 13px; line-height: 1.7; color: var(--fg-text); }
+.rules-list li { margin-bottom: 4px; }
+
+.camera-check {
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.camera-check video { width: 240px; height: 180px; border-radius: 6px; background: black; object-fit: cover; }
+.camera-status { font-size: 12px; color: var(--fg-muted); text-align: center; }
+
+.button-row { display: flex; align-items: center; gap: 16px; margin-top: 18px; flex-wrap: wrap; }
+.button-row.centered { justify-content: center; margin-top: 20px; }
+
+.agree-label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--fg-text); }
+.agree-label input { width: 16px; height: 16px; }
+
+/* ---- Result page ---- */
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+.result-box { background: var(--bg-card); border-radius: 8px; padding: 16px; text-align: center; }
+.result-value { font-size: 26px; font-weight: 700; margin-top: 4px; }
+.result-value.ok { color: var(--ok); }
+.result-value.warn { color: var(--warn); }
+.result-value.alert { color: var(--alert); }
+
+.breakdown-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+.breakdown-table th, .breakdown-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #3a3a4e; }
+.breakdown-table th { color: var(--fg-muted); font-weight: 600; }
+
+.answer-review { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.review-row { background: var(--bg-card); border-radius: 6px; padding: 10px 12px; border-left: 3px solid var(--neutral); }
+.review-row.correct { border-left-color: var(--ok); }
+.review-row.incorrect { border-left-color: var(--alert); }
+.review-question { font-size: 13px; margin-bottom: 4px; }
+.review-answer { font-size: 12px; color: var(--fg-muted); }
+
+.report-paths { font-family: "Consolas", monospace; font-size: 10px; color: var(--fg-muted); margin: 18px 0; }
+
+/* =====================================================================
+   EXAM PAGE LAYOUT
+   ===================================================================== */
+body.exam-body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.exam-topbar {
+  height: 64px;
+  background: var(--bg-panel);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+.exam-title-block h1 { font-size: 15px; margin: 0; }
+.exam-title-block .small { font-size: 11px; }
+
+.proctor-mini { position: relative; }
+.proctor-mini img { width: 72px; height: 54px; object-fit: cover; border-radius: 6px; background: black; }
+.proctor-mini .dot { position: absolute; top: 4px; right: 4px; width: 8px; height: 8px; }
+
+.exam-timer {
+  font-size: 20px;
+  font-weight: 700;
+  background: var(--bg-card);
+  padding: 8px 16px;
+  border-radius: 8px;
+  min-width: 90px;
+  text-align: center;
+}
+.exam-timer.low-time { color: var(--alert); background: rgba(255, 92, 124, 0.15); }
+
+.warning-banner {
+  background: var(--alert);
+  color: white;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.warning-banner.hidden { display: none; }
+
+.exam-main {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  min-height: 0;
+}
+
+.question-panel {
+  flex: 1;
+  background: var(--bg-panel);
+  border-radius: 10px;
+  padding: 24px;
+  overflow-y: auto;
+}
+.question-header { color: var(--fg-muted); font-size: 12px; margin-bottom: 10px; }
+.question-text { font-size: 17px; margin: 0 0 20px; line-height: 1.5; }
+
+.options-list { display: flex; flex-direction: column; gap: 10px; }
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 12px 14px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.option-item:hover { border-color: var(--accent); }
+.option-item.selected { border-color: var(--accent); background: rgba(124,140,255,0.15); }
+.option-item input { width: 16px; height: 16px; }
+
+.palette-panel {
+  width: 300px;
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.legend { display: flex; flex-wrap: wrap; gap: 10px; font-size: 10px; color: var(--fg-muted); margin-bottom: 10px; }
+.legend span { display: flex; align-items: center; gap: 4px; }
+.dotlegend { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+.dotlegend.answered { background: var(--ok); }
+.dotlegend.not-answered { background: transparent; border: 1px solid var(--alert); }
+.dotlegend.marked { background: #b388ff; }
+.dotlegend.not-visited { background: var(--bg-card); border: 1px solid #3f3f55; }
+
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.palette-cell {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  border: 1px solid #3f3f55;
+  background: var(--bg-card);
+  color: var(--fg-text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.palette-cell.current { outline: 2px solid var(--accent); }
+.palette-cell.answered { background: var(--ok); color: #0d1f16; border-color: var(--ok); }
+.palette-cell.not-answered { border-color: var(--alert); color: var(--alert); }
+.palette-cell.marked { background: #b388ff; color: #23113f; border-color: #b388ff; }
+
+.submit-summary {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--fg-muted);
+  background: var(--bg-card);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
+.violation-mini { font-size: 11px; color: var(--fg-muted); margin-bottom: 12px; }
+.violation-mini span { color: var(--alert); font-weight: 700; }
+
+.exam-footer {
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  padding: 12px 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* ---- Submit modal reuses .modal-overlay / .modal from style.css ---- */
